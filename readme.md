@@ -1,5 +1,5 @@
 # About
-`StateRecovery` is an important program for withdrawing assets on DeGate exodus mode. Any user can restore the Asset Merkle Tree by executing the `StateRecovery` program after DeGate enters the exodus mode without relying on any DeGate services and obtaining the key parameters required by the exodus mode. Execution reference of exodus mode [document](https://hackmd.io/7_89sgBlQlmM8wPRV4dDmQ)
+`StateRecovery` is an important program for withdrawing assets on DeGate exodus mode. Any user can restore the Asset Merkle Tree by executing the `StateRecovery` program after DeGate enters the exodus mode without relying on any DeGate services and obtaining the key parameters required by the exodus mode. Execution reference of exodus mode [document](https://docs.degate.com/testnet/how-to-withdraw-assets-in-exodus-mode)
 # Build
 ## Ordinary users, executable programs compiled with DeGate
 Goto release page of this github repository, download the latest executable program suitable for your machine OS.
