@@ -1,13 +1,14 @@
 # About
-`StateRecovery` is an important program for withdrawing assets on DeGate exodus mode. Any user can restore the Asset Merkle Tree by executing the `StateRecovery` program after DeGate enters the exodus mode without relying on any DeGate services and obtaining the key parameters required by the exodus mode. Execution reference of exodus mode [document](https://docs.degate.com/testnet/how-to-withdraw-assets-in-exodus-mode)
+`StateRecovery` is an important program for withdrawing assets on DeGate Exodus Mode. Any user can restore the Asset Merkle Tree by executing the `StateRecovery` program after DeGate enters the Exodus Mode without relying on any DeGate services. The user can obtain the key parameters required by the Exodus Mode to withdraw assets.
+Reference of Exodus Mode execution in this [document](https://docs.degate.com/testnet/how-to-withdraw-assets-in-exodus-mode).
 # Build
-## Ordinary users, executable programs compiled with DeGate
-Goto release page of this github repository, download the latest executable program suitable for your machine OS.
+## For ordinary users: executable programs compiled by DeGate
+Go to release page of this github repository and download the latest executable program suitable for your machine OS.
 
-For example, mac-OS downloads mac.zip, linux-OS downloads linux.zip
-## Developers, use source code to compile
+For example, for mac-OS download mac.zip, for linux-OS download linux.zip.
+## For developers: use source code to compile
 ### Install the golang environment
-Please refer to golang [official website]('https://go.dev/')
+Please refer to golang [official website]('https://go.dev/').
 ### Dependency pull
 Excute the command:
 ```
@@ -22,9 +23,9 @@ cd cmd
 ```
 go build -o staterecovery ./main.go
 ```
-generate executable program`staterecovery`
+Generate executable program`staterecovery`
 ## Configuration instructions
-The configuration file needs to be prepared before the program is executed, and all  parameters can be obtained on the Ethereum chain.
+The configuration file needs to be prepared before the program is executed and all  parameters can be obtained on the Ethereum chain.
 
 The configuration file is `config.toml`, which is in the same directory as `start.sh` and `staterecovery` executable file.
 
@@ -60,9 +61,9 @@ chainNode="https://mainnet.infura.io"
 ### Exchange contract address acquisition
 DeGate will pre-prepare the addresses of the exchange contract in the configuration file. Anyone can verify the addresses easily through explorers.
 ### chainNode get
-Register [Infura](https://www.infura.io/) account and use the Ethereum rpc node provided by Infura
-## program execution
-Give `start.sh` and `staterecovery` execution programs executable permissions.
+Register [Infura](https://www.infura.io/) account and use the Ethereum rpc node provided by Infura.
+## Program execution
+Give `start.sh` and `staterecovery` execution programs executable permissions:
 ```
 chmod +x start.sh
 chmod +x staterecovery
