@@ -1,5 +1,5 @@
 # 关于（About）
-StateRecovery是DeGate逃离模式提现的关键程序，任何用户均可在DeGate进入逃离模式后，在不依赖任何DeGate服务的情况下，通过执行StateRecovery程序来恢复资产树，并获得逃离模式需要的关键参数。逃离模式的执行参考[说明文档](https://hackmd.io/7_89sgBlQlmM8wPRV4dDmQ)
+StateRecovery是DeGate逃离模式提现的关键程序，任何用户均可在DeGate进入逃离模式后，在不依赖任何DeGate服务的情况下，通过执行StateRecovery程序来恢复资产树，并获得逃离模式需要的关键参数。逃离模式的执行参考[说明文档](https://docs.degate.com/testnet/how-to-withdraw-assets-in-exodus-mode)
 # 编译（build）
 ## 普通用户，使用DeGate编译好的可执行程序
 release列表页面，下载最新的，适合自己机器环境的可执行程序。
