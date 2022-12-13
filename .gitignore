@@ -24,7 +24,6 @@ cmd/_tmp.json
 cmd/_tmp
 cmd/state.json
 cmd/state_old.json
-cmd/start.sh
-cmd/stop.sh
 cmd/*.json
 cmd/blockfile/*
+cmd/blockfile-2/*
