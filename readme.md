@@ -2,11 +2,30 @@
 `StateRecovery` is an important program for withdrawing assets on DeGate Exodus Mode. Any user can restore the Asset Merkle Tree by executing the `StateRecovery` program after DeGate enters the Exodus Mode without relying on any DeGate services. The user can obtain the key parameters required by the Exodus Mode to withdraw assets.
 Reference of Exodus Mode execution in this [document](https://docs.degate.com/testnet/how-to-withdraw-assets-in-exodus-mode).
 # Build
-## For ordinary users: executable programs compiled by DeGate
+## Executable programs compiled with DeGate
 Go to release page of this github repository and download the latest executable program suitable for your machine OS.
 
 For example, for mac-OS download mac.zip, for linux-OS download linux.zip.
-## For developers: use source code to compile
+## Compile with docker
+### build a docker image using dockerfile
+Excute the command:
+```
+cd docker
+docker docker build -t zkp:1.0 .
+```
+### create a container using image
+Excute the command:
+```
+docker run --name=zkp -it zkp:1.0 bash
+```
+### program compilation
+The container contains the cloned `staterecovery` code, just compile it directly
+Excute the command:
+```
+cd /go/src/degate-state-recover/cmd
+./build_linux.sh
+```
+## Compile from source code
 ### Install the golang environment
 Please refer to golang [official website]('https://go.dev/').
 ### Dependency pull

@@ -1,11 +1,30 @@
 # 关于（About）
 StateRecovery是DeGate逃离模式提现的关键程序，任何用户均可在DeGate进入逃离模式后，在不依赖任何DeGate服务的情况下，通过执行StateRecovery程序来恢复资产树，并获得逃离模式需要的关键参数。逃离模式的执行参考[说明文档](https://docs.degate.com/testnet/how-to-withdraw-assets-in-exodus-mode)
 # 编译（build）
-## 普通用户，使用DeGate编译好的可执行程序
+## 使用DeGate编译好的可执行程序
 release列表页面，下载最新的，适合自己机器环境的可执行程序。
 
 例如，mac系统下载mac.zip，linux系统下载linux.zip
-## 开发者，使用源码进行编译
+## 开发者，使用Docker进行编译
+### 使用Dockerfile构建docker镜像
+执行命令
+```
+cd docker
+docker docker build -t zkp:1.0 .
+```
+### 使用镜像创建容器
+执行命令
+```
+docker run --name=zkp -it zkp:1.0 bash
+```
+创建容器后会自动进入容器内
+### 程序编译
+执行命令
+```
+cd /go/src/degate-state-recover/cmd
+./build_linux.sh
+```
+## 使用源码进行编译
 ### 安装golang环境
 请参考golang[官网]('https://go.dev/')
 ### 依赖拉取
