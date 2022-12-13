@@ -36,21 +36,25 @@ type ChainDataResource struct {
 }
 
 func newChainDataResource(conf *conf.Config) *ChainDataResource {
+	var err error
 	if len(conf.ExchangeContract) == 0 {
 		panic("not find exchangeContract")
-	}
-	if conf.FirstL1BlockID <= 0 {
-		panic("not find FirstL1BlockID")
-	}
-	var err error
-	err = InitBlockPath()
-	if err != nil {
-		panic(err)
 	}
 	dr := &ChainDataResource{
 		exchangeAddress: common.HexToAddress(conf.ExchangeContract),
 	}
 	dr.client, err = ethclient.Dial(conf.ChainNode)
+	if err != nil {
+		panic(err)
+	}
+	if conf.StateBlockID > 0 {
+		conf.LastL2BlockID = conf.StateBlockID
+		return dr
+	}
+	if conf.FirstL1BlockID <= 0 {
+		panic("not find FirstL1BlockID")
+	}
+	err = InitBlockPath()
 	if err != nil {
 		panic(err)
 	}
@@ -85,6 +89,19 @@ func (dr *ChainDataResource) GetTokenIDByAddress(tokenAddr string) (tokenID stri
 		return
 	}
 	return strconv.FormatUint(uint64(tokenIDUint), 10), nil
+}
+
+func (dr *ChainDataResource) GetTokenAddressByID(tokenId uint32) (tokenAddr common.Address, err error) {
+	exchangeContract, err := exchangeV3.NewExchangeV3Caller(common.HexToAddress(conf.Conf.ExchangeContract), dr.client)
+	if err != nil {
+		return
+	}
+
+	tokenAddr, err = exchangeContract.GetTokenAddress(nil, tokenId)
+	if err != nil {
+		return
+	}
+	return tokenAddr, nil
 }
 
 func (dr *ChainDataResource) Scanner() {

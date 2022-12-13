@@ -27,16 +27,17 @@ func initDataResource(config *conf.Config) {
 }
 
 func StartRecovery(config *conf.Config) (state *entity.State) {
+	state = loadState(config.StateSavedFile)
+	config.StateBlockID = state.BlockId
 	initDataResource(config)
-	state = recoveryState(config)
+	state = recoveryState(config, state)
 	// create withdraw mode data
 	createWithdrawModeMerkleProof(config, state)
 	return state
 }
 
-func recoveryState(config *conf.Config) (state *entity.State) {
+func recoveryState(config *conf.Config, state *entity.State) (*entity.State) {
 	// load state from file or create empty state
-	state = loadState(config.StateSavedFile)
 	if state.BlockId == config.LastL2BlockID {
 		return state
 	}

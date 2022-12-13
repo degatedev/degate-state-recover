@@ -1,6 +1,10 @@
 package data
 
-import "staterecovery/conf"
+import (
+	"staterecovery/conf"
+
+	"github.com/ethereum/go-ethereum/common"
+)
 
 type BlockData struct {
 	BlockId int64  `json:"block_id"`
@@ -10,6 +14,7 @@ type BlockData struct {
 type DataResource interface {
 	GetDataByBlockId(blockId int) (data *BlockData, err error)
 	GetTokenIDByAddress(tokenAddr string) (tokenID string, err error)
+	GetTokenAddressByID(tokenId uint32) (tokenAddr common.Address, err error)
 }
 
 func NewDataResource(conf *conf.Config) DataResource {

@@ -22,12 +22,12 @@ func createWithdrawModeMerkleProof(config *conf.Config, state *entity.State) {
 	// 获取对应的accountID与tokenID
 	withdrawModeAccountID, err := findAccountID(config.WithdrawModeAccount, state)
 	if err != nil {
-		log.Println("in createWithdrawModeMerkleProof findAccountID err:", err.Error)
+		log.Println("in createWithdrawModeMerkleProof findAccountID err:", err.Error())
 		return
 	}
 	withdrawModeTokenID, err := dataResource.GetTokenIDByAddress(config.WithdrawModeToken)
 	if err != nil {
-		log.Println("in createWithdrawModeMerkleProof GetTokenIDByAddress err:", err.Error)
+		log.Println("in createWithdrawModeMerkleProof GetTokenIDByAddress err:", err.Error())
 		return
 	}
 

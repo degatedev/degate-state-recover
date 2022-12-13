@@ -41,6 +41,7 @@ type AccountValue struct {
 	UpdateBalancesLeafs map[string]*BalanceNode
 	UpdateStorageLeafs map[string]*StorageNode
 	UpdateAccount bool
+	LeafHash *big.Int
 }
 
 type StorageNode struct {
