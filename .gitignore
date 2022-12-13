@@ -22,8 +22,5 @@ cmd/build.sh
 cmd/build-server.sh
 cmd/_tmp.json
 cmd/_tmp
-cmd/state.json
-cmd/state_old.json
-cmd/*.json
 cmd/blockfile/*
 cmd/blockfile-2/*

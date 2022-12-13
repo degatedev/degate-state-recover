@@ -5,4 +5,4 @@ ENV LANG C.UTF-8
 
 RUN apt-get install -y git gcc
 RUN cd /go/src/ && git clone https://github.com/degatedev/degate-state-recover.git
-RUN cd /go/src/degate-state-recover && go mod download
+RUN cd /go/src/degate-state-recover && git branch rinkeby && go mod download
