@@ -7,8 +7,10 @@ import (
 	"log"
 	"staterecovery/common/entity"
 	"staterecovery/common/util"
-	"staterecovery/data"
 	"staterecovery/conf"
+	"staterecovery/data"
+	"staterecovery/statemanager"
+	"strconv"
 	"testing"
 
 	"github.com/ethereum/go-ethereum/common"
@@ -80,4 +82,58 @@ func TestParseChainBlockData(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+}
+
+func TestShowAccountInfo(t *testing.T) {
+	state := loadState("./cmd/state.json")
+	conf.InitByPath("./cmd/config.toml")
+	conf.Conf.DataFrom = 1
+	conf.Conf.StateBlockID = 1
+	log.Println("chainNode:", conf.Conf.ChainNode)
+	dataResource = data.NewDataResource(conf.Conf)
+	// log.Println("test:", getTokenAddrByTokenID("1"))
+
+	statemanager.CalculateStateTree(state)
+	accounts := entity.NewAccounts()
+	for accountID, accountValue := range state.AccountsValues {
+		account := entity.NewAccount()
+		accounts.Accounts[getOwnerAddr(accountValue.Owner)] = account
+		account.AccountID = accountID
+
+		for tokenID, balanceNode := range accountValue.BalancesLeafs {
+			tokenAddr := getTokenAddrByTokenID(tokenID)
+			account.Tokens[tokenAddr] = &entity.TokenInfo{
+				Balance: balanceNode.Balance,
+			}
+		}
+	}
+	accountsJson, _ := json.Marshal(accounts)
+	err := util.WriteTxtFile(string(accountsJson), "./cmd/accounts.json")
+	if err != nil {
+		log.Println("in TestShowAccountInfo WriteTxtFile error:", err.Error())
+		return
+	}
+}
+
+func getOwnerAddr(ownerIntStr string) (string) {
+	big, _ := decimal.NewFromString(ownerIntStr)
+	hex := fmt.Sprintf("0x%x", big.BigInt())
+	return hex
+}
+
+var (
+	tokenIDAddrMap = make(map[string] string)
+)
+func getTokenAddrByTokenID(tokenID string) string {
+	tokenAddrStr := tokenIDAddrMap[tokenID]
+	if tokenAddrStr != "" {
+		return tokenAddrStr
+	}
+	tokenIdUint, _ := strconv.ParseUint(tokenID, 10, 32)
+	tokenAddr, err := dataResource.GetTokenAddressByID(uint32(tokenIdUint))
+	if err != nil {
+		panic("in getTokenAddrByTokenID error:" + err.Error() + ";tokenID:" + tokenID)
+	}
+	tokenIDAddrMap[tokenID] = tokenAddr.String()
+	return tokenAddr.String()
 }

@@ -35,6 +35,7 @@ type Config struct {
 	FirstL1BlockID 					  uint64
 	ChainNode               		  string
 	BlockFilePath               	  string
+	StateBlockID					  int
 }
 
 type MySql struct {
@@ -52,6 +53,15 @@ func init() {
 // Init init conf
 func Init() (err error) {
 	_, err = toml.DecodeFile(confPath, &Conf)
+	if err != nil {
+		log.Println("toml decode error:", err.Error())
+		return err
+	}
+	return nil
+}
+
+func InitByPath(configPath string) (err error) {
+	_, err = toml.DecodeFile(configPath, &Conf)
 	if err != nil {
 		log.Println("toml decode error:", err.Error())
 		return err

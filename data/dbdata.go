@@ -4,6 +4,7 @@ import (
 	"errors"
 	"staterecovery/conf"
 
+	"github.com/ethereum/go-ethereum/common"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gogather/com/log"
 	"github.com/jinzhu/gorm"
@@ -61,4 +62,8 @@ func (dr *DBDataResource) GetDataByBlockId(blockId int) (data *BlockData, err er
 
 func (dr *DBDataResource) GetTokenIDByAddress(tokenAddr string) (tokenID string, err error) {
 	return "0", errors.New("in DBDataResource GetTokenIDByAddress not implemented")
+}
+
+func (dr *DBDataResource) GetTokenAddressByID(tokenId uint32) (tokenAddr common.Address, err error) {
+	return common.HexToAddress("0x"), errors.New("in DBDataResource GetTokenAddressByID not implemented")
 }

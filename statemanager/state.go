@@ -3,6 +3,7 @@ package statemanager
 import (
 	"staterecovery/common/entity"
 	"staterecovery/common/util"
+	"sync"
 )
 
 var (
@@ -93,16 +94,36 @@ func UpdateState(accountUpdateList []*entity.AccountUpdate, state *entity.State)
 
 func CalculateStateTree(state *entity.State) {
 	calculateDefaultAccountAssetTree(state)
-	for accountID, accountValue := range state.AccountsValues {
+	// for accountID, accountValue := range state.AccountsValues {
+	// 	// calculate balance
+	// 	accountValue.BalancesTree = getDefaultChildTree(defaultBalanceTree, balanceDepth, treeNodeChildrenNum, defaultBalanceRoot.String())
+	// 	for key, leaf := range accountValue.BalancesLeafs {
+	// 		leafHash := poseidonHash(entity.BalanceNodeToPoseidonParam(leaf), BalanceNodeHashCalculateParam)
+	// 		accountValue.BalancesTree.Root = updateTree(accountValue.BalancesTree.Root, accountValue.BalancesTree.Db.Kv, 16, key, leafHash.String())
+	// 	}
+	// 	// calculate account
+	// 	leafAccountAssetHash := poseidonHash(entity.AccountAssetNodeToPoseidonParam(accountValue), AccountAssetNodeHashCalculateParam)
+	// 	state.AccountsAssetRoot = updateTree(state.AccountsAssetRoot, state.AccountsAssetTree, accountDepth, accountID, leafAccountAssetHash.String())
+	// }
+
+	var wg sync.WaitGroup
+	for _, accountValue := range state.AccountsValues {
 		// calculate balance
-		accountValue.BalancesTree = getDefaultChildTree(defaultBalanceTree, balanceDepth, treeNodeChildrenNum, defaultBalanceRoot.String())
-		for key, leaf := range accountValue.BalancesLeafs {
-			leafHash := poseidonHash(entity.BalanceNodeToPoseidonParam(leaf), BalanceNodeHashCalculateParam)
-			accountValue.BalancesTree.Root = updateTree(accountValue.BalancesTree.Root, accountValue.BalancesTree.Db.Kv, 16, key, leafHash.String())
-		}
+		wg.Add(1)
+		go func (accountValue *entity.AccountValue)  {
+			accountValue.BalancesTree = getDefaultChildTree(defaultBalanceTree, balanceDepth, treeNodeChildrenNum, defaultBalanceRoot.String())
+			for key, leaf := range accountValue.BalancesLeafs {
+				leafHash := poseidonHash(entity.BalanceNodeToPoseidonParam(leaf), BalanceNodeHashCalculateParam)
+				accountValue.BalancesTree.Root = updateTree(accountValue.BalancesTree.Root, accountValue.BalancesTree.Db.Kv, 16, key, leafHash.String())
+			}
+			accountValue.LeafHash = poseidonHash(entity.AccountAssetNodeToPoseidonParam(accountValue), AccountAssetNodeHashCalculateParam)
+			wg.Done()
+		} (accountValue)
+	}
+	wg.Wait()
+	for accountID, accountValue := range state.AccountsValues {
 		// calculate account
-		leafAccountAssetHash := poseidonHash(entity.AccountAssetNodeToPoseidonParam(accountValue), AccountAssetNodeHashCalculateParam)
-		state.AccountsAssetRoot = updateTree(state.AccountsAssetRoot, state.AccountsAssetTree, accountDepth, accountID, leafAccountAssetHash.String())
+		state.AccountsAssetRoot = updateTree(state.AccountsAssetRoot, state.AccountsAssetTree, accountDepth, accountID, accountValue.LeafHash.String())
 	}
 }
 
