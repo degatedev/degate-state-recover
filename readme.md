@@ -11,7 +11,7 @@ For example, for mac-OS download mac.zip, for linux-OS download linux.zip.
 Excute the command:
 ```
 cd docker
-docker docker build -t zkp:1.0 .
+docker build -t zkp:1.0 .
 ```
 ### create a container using image
 Excute the command:
