@@ -79,7 +79,7 @@ chainNode="https://mainnet.infura.io"
 ```
 ### Exchange contract address acquisition
 DeGate will pre-prepare the addresses of the exchange contract in the configuration file. Anyone can verify the addresses easily through explorers.
-### chainNode get
+### ChainNode get
 Register [Infura](https://www.infura.io/) account and use the Ethereum rpc node provided by Infura.
 ## Program execution
 Give `start.sh` and `staterecovery` execution programs executable permissions:
