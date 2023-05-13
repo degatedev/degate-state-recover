@@ -27,3 +27,5 @@ cmd/state_old.json
 cmd/*.json
 cmd/blockfile/*
 cmd/blockfile-2/*
+
+output/
