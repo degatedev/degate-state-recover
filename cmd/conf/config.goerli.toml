@@ -2,14 +2,14 @@ stateSavedFile = "state.json"
 loopInterval = 0 # second
 saveStateBlockInterval = 1000
 
-withdrawModeAccount="0xf8fedcc8855e569b17c3f69ec96547ae45c7684d"
-withdrawModeToken="0x466595626333c55fa7d7Ad6265D46bA5fDbBDd99"
+withdrawModeAccount = "0xf8fedcc8855e569b17c3f69ec96547ae45c7684d"
+withdrawModeToken = "0x466595626333c55fa7d7Ad6265D46bA5fDbBDd99"
 
 withdrawModeFilePath = "merkleProof.json"
 
 # first block id of zkRollup
-firstL1BlockID=7919204
+firstL1BlockID = 7919204
 
-exchangeContract="0xbcd394f0579db46f2b94d0490cee09bd34288c08"
-chainNode=""
-blockFilePath="./"
+exchangeContract = "0xbcd394f0579db46f2b94d0490cee09bd34288c08"
+chainNode = ""
+blockFilePath = "./"
