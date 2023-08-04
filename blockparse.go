@@ -13,22 +13,23 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 )
 
-
 func parseBlock(blockData *data.BlockData, state *entity.State) (err error) {
 	// parse submitted block
-	submittedBlock, err := parseSubmittedBlock(blockData)
+	submittedBlocks, err := parseSubmittedBlock(blockData)
 	if err != nil {
 		return err
 	}
-	// parse data
-	parseData(submittedBlock, state)
-
+	for _, submittedBlock := range submittedBlocks {
+		// parse data
+		parseData(submittedBlock, state)
+	}
+	
 	return nil
 }
 
 func parseData(submittedBlock *entity.SubmittedBlock, state *entity.State) (err error) {
 	// verify length of data
-	if submittedBlock.Data == nil || len(submittedBlock.Data) != 167 + int(submittedBlock.BlockSize) * 83 {
+	if submittedBlock.Data == nil || len(submittedBlock.Data) != 167+int(submittedBlock.BlockSize)*83 {
 		return errors.New("in parseData invalid data")
 	}
 	// exchange := submittedBlock.Data[:20]
@@ -53,7 +54,7 @@ func parseData(submittedBlock *entity.SubmittedBlock, state *entity.State) (err 
 	return nil
 }
 
-func parseSubmittedBlock(blockData *data.BlockData) (submittedBlock *entity.SubmittedBlock, err error) {
+func parseSubmittedBlock(blockData *data.BlockData) (submittedBlock []*entity.SubmittedBlock, err error) {
 	// decode binary
 	// method: submitBlocksWithCallbacks or submitBlocks(latest contract)
 	resArray, err := abihelper.AbiDecode(blockAbi, common.Bytes2Hex(blockData.Data))
@@ -87,8 +88,5 @@ func parseSubmittedBlock(blockData *data.BlockData) (submittedBlock *entity.Subm
 		log.Println("in parseBlock submittedBlock Unmarshal err:", err.Error())
 		return nil, err
 	}
-	if len(submittedBlocks) != 1 {
-		return nil, errors.New("in parseBlock submittedBlocks length invalid")
-	}
-	return submittedBlocks[0], nil
+	return submittedBlocks, nil
 }
