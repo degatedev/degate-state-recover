@@ -23,13 +23,13 @@ func parseBlock(blockData *data.BlockData, state *entity.State) (err error) {
 		// parse data
 		parseData(submittedBlock, state)
 	}
-	
+
 	return nil
 }
 
 func parseData(submittedBlock *entity.SubmittedBlock, state *entity.State) (err error) {
 	// verify length of data
-	if submittedBlock.Data == nil || len(submittedBlock.Data) != 167+int(submittedBlock.BlockSize)*83 {
+	if submittedBlock.Data == nil || len(submittedBlock.Data) != 168+int(submittedBlock.BlockSize)*83 {
 		return errors.New("in parseData invalid data")
 	}
 	// exchange := submittedBlock.Data[:20]
@@ -38,19 +38,19 @@ func parseData(submittedBlock *entity.SubmittedBlock, state *entity.State) (err 
 	// assetMerkleRootBefore := submittedBlock.Data[84:116]
 	// assetMerkleRootAfter := submittedBlock.Data[116:148]
 	// timestamp := submittedBlock.Data[148:152]
-	// protocolFeeBips := submittedBlock.Data[152:153]
-	// numConditionalTransactions := submittedBlock.Data[153:157]
-	operatorAccountID := util.BytesToIntStr(submittedBlock.Data[157:161])
-	depositSize := util.BytesToInt(submittedBlock.Data[161:163])
-	accountUpdateSize := util.BytesToInt(submittedBlock.Data[163:165])
-	withdrawSize := util.BytesToInt(submittedBlock.Data[165:167])
+	// protocolFeeBips := submittedBlock.Data[152:154]
+	// numConditionalTransactions := submittedBlock.Data[154:158]
+	operatorAccountID := util.BytesToIntStr(submittedBlock.Data[158:162])
+	depositSize := util.BytesToInt(submittedBlock.Data[162:164])
+	accountUpdateSize := util.BytesToInt(submittedBlock.Data[164:166])
+	withdrawSize := util.BytesToInt(submittedBlock.Data[166:168])
 
 	// log.Println("in parseData print data info")
 
 	// // parse aux data
 	withdrawAuxDataList := parseAuxData(submittedBlock.AuxiliaryData, depositSize, accountUpdateSize, withdrawSize)
 
-	transactionparse.ParseTransaction(int(submittedBlock.BlockSize), depositSize, accountUpdateSize, withdrawSize, submittedBlock.Data[167:], withdrawAuxDataList, operatorAccountID, state)
+	transactionparse.ParseTransaction(int(submittedBlock.BlockSize), depositSize, accountUpdateSize, withdrawSize, submittedBlock.Data[168:], withdrawAuxDataList, operatorAccountID, state)
 	return nil
 }
 

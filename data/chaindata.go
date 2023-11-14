@@ -162,6 +162,7 @@ func (dr *ChainDataResource) Scanner() {
 			time.Sleep(time.Second * 5)
 			continue
 		}
+		savedTxHash := ""
 		for _, event := range logs {
 			var (
 				tx *types.Transaction
@@ -183,7 +184,10 @@ func (dr *ChainDataResource) Scanner() {
 				}
 				break
 			}
-			dr.SaveBlockData(tx.Data(), zkpBlockId, event.BlockNumber)
+			if savedTxHash != event.TxHash.String() {
+				savedTxHash = event.TxHash.String()
+				dr.SaveBlockData(tx.Data(), zkpBlockId, event.BlockNumber)
+			}
 			log.Info("zkp block %v scanner finish", event.BlockNumber)
 		}
 		if int(zkpBlockId) >= conf.Conf.LastL2BlockID {

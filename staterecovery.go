@@ -13,9 +13,9 @@ import (
 )
 
 var (
-	blockAbi = `[{"inputs":[{"components":[{"internalType":"uint8","name":"blockType","type":"uint8"},{"internalType":"uint16","name":"blockSize","type":"uint16"},{"internalType":"uint8","name":"blockVersion","type":"uint8"},{"internalType":"bytes","name":"data","type":"bytes"},{"internalType":"uint256[8]","name":"proof","type":"uint256[8]"},{"internalType":"bool","name":"storeBlockInfoOnchain","type":"bool"},{"internalType":"bytes","name":"auxiliaryData","type":"bytes"},{"internalType":"bytes","name":"offchainData","type":"bytes"}],"internalType":"struct ExchangeData.Block[]","name":"blocks","type":"tuple[]"}],"name":"submitBlocks","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"components":[{"components":[{"internalType":"uint32","name":"accountID","type":"uint32"},{"internalType":"address","name":"owner","type":"address"},{"internalType":"uint256","name":"pubKeyX","type":"uint256"},{"internalType":"uint256","name":"pubKeyY","type":"uint256"},{"internalType":"uint32","name":"nonce","type":"uint32"}],"internalType":"struct ExchangeData.AccountLeaf","name":"accountLeaf","type":"tuple"},{"components":[{"internalType":"uint32","name":"tokenID","type":"uint32"},{"internalType":"uint248","name":"balance","type":"uint248"}],"internalType":"struct ExchangeData.BalanceLeaf","name":"balanceLeaf","type":"tuple"},{"internalType":"uint256[48]","name":"accountMerkleProof","type":"uint256[48]"},{"internalType":"uint256[48]","name":"balanceMerkleProof","type":"uint256[48]"}],"internalType":"struct ExchangeData.MerkleProof","name":"merkleProof","type":"tuple"}],"name":"withdrawFromMerkleTree","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bool","name":"isDataCompressed","type":"bool"},{"internalType":"bytes","name":"data","type":"bytes"},{"components":[{"components":[{"internalType":"uint16","name":"blockIdx","type":"uint16"},{"components":[{"internalType":"uint16","name":"txIdx","type":"uint16"},{"internalType":"uint16","name":"numTxs","type":"uint16"},{"internalType":"uint16","name":"receiverIdx","type":"uint16"},{"internalType":"bytes","name":"data","type":"bytes"}],"internalType":"structLoopringIOExchangeOwner.TxCallback[]","name":"txCallbacks","type":"tuple[]"}],"internalType":"structLoopringIOExchangeOwner.BlockCallback[]","name":"blockCallbacks","type":"tuple[]"},{"internalType":"address[]","name":"receivers","type":"address[]"}],"internalType":"structLoopringIOExchangeOwner.CallbackConfig","name":"config","type":"tuple"}],"name":"submitBlocksWithCallbacks","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bool","name":"isDataCompressed","type":"bool"},{"internalType":"bytes","name":"data","type":"bytes"}],"name":"submitBlocks","outputs":[],"stateMutability":"nonpayable","type":"function"}]`
+	blockAbi           = `[{"inputs":[{"components":[{"internalType":"uint8","name":"blockType","type":"uint8"},{"internalType":"uint16","name":"blockSize","type":"uint16"},{"internalType":"uint8","name":"blockVersion","type":"uint8"},{"internalType":"bytes","name":"data","type":"bytes"},{"internalType":"uint256[8]","name":"proof","type":"uint256[8]"},{"internalType":"bool","name":"storeBlockInfoOnchain","type":"bool"},{"internalType":"bytes","name":"auxiliaryData","type":"bytes"},{"internalType":"bytes","name":"offchainData","type":"bytes"}],"internalType":"struct ExchangeData.Block[]","name":"blocks","type":"tuple[]"}],"name":"submitBlocks","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"components":[{"components":[{"internalType":"uint32","name":"accountID","type":"uint32"},{"internalType":"address","name":"owner","type":"address"},{"internalType":"uint256","name":"pubKeyX","type":"uint256"},{"internalType":"uint256","name":"pubKeyY","type":"uint256"},{"internalType":"uint32","name":"nonce","type":"uint32"}],"internalType":"struct ExchangeData.AccountLeaf","name":"accountLeaf","type":"tuple"},{"components":[{"internalType":"uint32","name":"tokenID","type":"uint32"},{"internalType":"uint248","name":"balance","type":"uint248"}],"internalType":"struct ExchangeData.BalanceLeaf","name":"balanceLeaf","type":"tuple"},{"internalType":"uint256[48]","name":"accountMerkleProof","type":"uint256[48]"},{"internalType":"uint256[48]","name":"balanceMerkleProof","type":"uint256[48]"}],"internalType":"struct ExchangeData.MerkleProof","name":"merkleProof","type":"tuple"}],"name":"withdrawFromMerkleTree","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bool","name":"isDataCompressed","type":"bool"},{"internalType":"bytes","name":"data","type":"bytes"},{"components":[{"components":[{"internalType":"uint16","name":"blockIdx","type":"uint16"},{"components":[{"internalType":"uint16","name":"txIdx","type":"uint16"},{"internalType":"uint16","name":"numTxs","type":"uint16"},{"internalType":"uint16","name":"receiverIdx","type":"uint16"},{"internalType":"bytes","name":"data","type":"bytes"}],"internalType":"structLoopringIOExchangeOwner.TxCallback[]","name":"txCallbacks","type":"tuple[]"}],"internalType":"structLoopringIOExchangeOwner.BlockCallback[]","name":"blockCallbacks","type":"tuple[]"},{"internalType":"address[]","name":"receivers","type":"address[]"}],"internalType":"structLoopringIOExchangeOwner.CallbackConfig","name":"config","type":"tuple"}],"name":"submitBlocksWithCallbacks","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bool","name":"isDataCompressed","type":"bool"},{"internalType":"bytes","name":"data","type":"bytes"}],"name":"submitBlocks","outputs":[],"stateMutability":"nonpayable","type":"function"}]`
 	methodSubmitBlocks = "submitBlocks"
-	dataResource data.DataResource
+	dataResource       data.DataResource
 )
 
 func initDataResource(config *conf.Config) {
@@ -36,7 +36,7 @@ func StartRecovery(config *conf.Config) (state *entity.State) {
 	return state
 }
 
-func recoveryState(config *conf.Config, state *entity.State) (*entity.State) {
+func recoveryState(config *conf.Config, state *entity.State) *entity.State {
 	// load state from file or create empty state
 	if state.BlockId == config.LastL2BlockID {
 		return state
@@ -53,9 +53,13 @@ func recoveryState(config *conf.Config, state *entity.State) (*entity.State) {
 		blockData, err := dataResource.GetDataByBlockId(state.BlockId)
 		if err != nil {
 			log.Println("in StartRecovery GetDataByBlockId:", err.Error(), "; maybe loop end.")
-			state.BlockId--
+			//state.BlockId--
+			if state.BlockId == config.LastL2BlockID {
+				saveState(startBlockID, config.StateSavedFile, state)
+				break
+			}
 			saveState(startBlockID, config.StateSavedFile, state)
-			break
+			continue
 		}
 		parseBlock(blockData, state)
 
@@ -64,7 +68,7 @@ func recoveryState(config *conf.Config, state *entity.State) (*entity.State) {
 			break
 		}
 		// save state file
-		if state.BlockId % config.SaveStateBlockInterval == 0 {
+		if state.BlockId%config.SaveStateBlockInterval == 0 {
 			saveState(startBlockID, config.StateSavedFile, state)
 		}
 
@@ -86,12 +90,12 @@ func loadState(statePath string) *entity.State {
 	}
 	content, err := util.ReadTxtFile(statePath)
 	if err != nil {
-		panic("in loadState state file can not open err:" +  err.Error())
+		panic("in loadState state file can not open err:" + err.Error())
 	}
 	state := &entity.State{}
 	err = json.Unmarshal([]byte(content), state)
 	if err != nil {
-		panic("in loadState state file can not json Unmarshal err:" +  err.Error())
+		panic("in loadState state file can not json Unmarshal err:" + err.Error())
 	}
 	return state
 }
