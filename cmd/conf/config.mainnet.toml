@@ -1,0 +1,15 @@
+stateSavedFile = "state.json"
+loopInterval = 0 # second
+saveStateBlockInterval = 1000
+
+withdrawModeAccount = ""
+withdrawModeToken = ""
+
+withdrawModeFilePath = "merkleProof.json"
+
+# first block id of zkRollup
+firstL1BlockID = 0
+
+exchangeContract = ""
+chainNode = ""
+blockFilePath = "./"

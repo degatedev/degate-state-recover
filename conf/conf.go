@@ -9,33 +9,39 @@ import (
 	"github.com/BurntSushi/toml"
 )
 
+const (
+	EtherumMainNet = "mainnet"
+	EtherumGoerli  = "goerli"
+)
+
 var (
-	confPath string
-	Conf     = &Config{}
+	networkName string
+	confPath    string
+	Conf        = &Config{}
 )
 
 // Config get config from toml .
 type Config struct {
-	DataFrom                          int
-	MySql                             *MySql
-	StateSavedFile                    string
-	ProtocolAccount                   string
-	WhiteAccounts                     []*entity.WhiteAccount `json:"whiteAccounts"`
-	LoopInterval                      int
-	SaveStateBlockInterval            int
-	LastL2BlockID                     int
-	WithdrawModeAccount				  string
-	WithdrawModeToken				  string
-	WithdrawModeFilePath          	  string
+	DataFrom               int
+	MySql                  *MySql
+	StateSavedFile         string
+	ProtocolAccount        string
+	WhiteAccounts          []*entity.WhiteAccount `json:"whiteAccounts"`
+	LoopInterval           int
+	SaveStateBlockInterval int
+	LastL2BlockID          int
+	WithdrawModeAccount    string
+	WithdrawModeToken      string
+	WithdrawModeFilePath   string
 	// state check
-	StateCheckLoopInterval 			  int
-	StateFileGetUrl 				  string
-	PrometheusPort 					  string
-	ExchangeContract            	  string
-	FirstL1BlockID 					  uint64
-	ChainNode               		  string
-	BlockFilePath               	  string
-	StateBlockID					  int
+	StateCheckLoopInterval int
+	StateFileGetUrl        string
+	PrometheusPort         string
+	ExchangeContract       string
+	FirstL1BlockID         uint64
+	ChainNode              string
+	BlockFilePath          string
+	StateBlockID           int
 }
 
 type MySql struct {
@@ -47,7 +53,14 @@ type MySql struct {
 }
 
 func init() {
-	flag.StringVar(&confPath, "conf", "", "config path")
+	flag.StringVar(&networkName, "networkName", "mainnet", "network name")
+	if networkName == EtherumMainNet {
+		confPath = "./conf/mainnet.toml"
+	} else if networkName == EtherumGoerli {
+		confPath = "./conf/goerli.toml"
+	} else {
+		panic("networkName error")
+	}
 }
 
 // Init init conf
